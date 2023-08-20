@@ -1,5 +1,4 @@
-#define MAIN
-#include "screen.c"
+#include "screen.h"
 
 #include <errno.h>
 #include <signal.h>
@@ -30,3 +29,4 @@ static void handle_sigint (int sig) {
     screen_deinit();
     exit(130);
 }
+

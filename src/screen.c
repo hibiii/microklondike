@@ -1,13 +1,5 @@
-#ifndef SCREEN_C
-#define SCREEN_C
-
-// [errors] nonzero for fail
-#include <stdio.h>
-int screen_init(void);
-int screen_deinit(void);
-
-#ifndef MAIN
 #include <stdbool.h>
+#include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 
@@ -41,6 +33,3 @@ int screen_deinit(void) {
     }
     return 0;
 }
-
-#endif
-#endif
