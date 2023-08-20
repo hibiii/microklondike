@@ -1,3 +1,4 @@
+#include "game.h"
 #include "screen.h"
 
 #include <errno.h>
@@ -38,9 +39,9 @@ static void handle_sigint (int sig) {
 static void game_loop(void) {
     bool loops = true;
     char c = ' ';
+    Game game = game_init();
     while (loops) {
-        fputc(c, stdout);
-        fputc('\r', stdout);
+        game_draw(&game);
         switch (c = fgetc(stdin)) {
         case 'q': // fallthrough
         case 'Q': // fallthrough
@@ -48,8 +49,18 @@ static void game_loop(void) {
         case EOF:
             loops = false;
             break;
+        case '1': // fallthrough
+        case '2': // fallthrough
+        case '3': // fallthrough
+            if (game.selected) {
+                game_put_on_tower(&game, c - '1');
+            } else {
+                game_select_from_tower(&game, c - '1');
+            }
+            break;
         default:
             ;
         }
     }
+    game_deinit(&game);
 }

@@ -1,10 +1,12 @@
+#include "screen.h"
+
+#include <errno.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
-#include <unistd.h>
 
-#include <errno.h>
 #include <termios.h>
+#include <unistd.h>
 
 
 static struct {
@@ -23,6 +25,13 @@ int screen_init(void) {
     if (tcsetattr(STDIN_FILENO, TCSANOW, &screen.new)) {
         return -1;
     }
+    for (int i = 4; i; i--) {
+        fputc('\n', stdout);
+    }
+    screen_cursor_up(4);
+    if (ferror(stdout)) {
+        return -1;
+    }
     return 0;
 }
 
@@ -33,3 +42,11 @@ int screen_deinit(void) {
     }
     return 0;
 }
+
+
+int screen_cursor_up(int amt) {
+    fprintf(stdout, "\x1B[%dA", amt);
+    return ferror(stdout);
+}
+
+const char *screen_clear_line = "\x1B[2K";
